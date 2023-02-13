@@ -24,7 +24,8 @@ class Creature {
 
     if (direction.mag() < this.diameter/2){
       this.full = 1000;
-      let bigger = slider.value();
+      //let bigger = slider.value();
+      let bigger = bb+slider.value();
       this.diameter+=bigger;
       return true;
     } 
@@ -49,10 +50,9 @@ class Creature {
     }
 
     this.velocity.limit(this.speedLimit);
-    // Add velocity to the location.
+ 
     this.location.add(this.velocity);
 
-    // Display circle at location vector
     noStroke();
     fill(map(this.full,0,100,0,255),0,150);
     circle(this.location.x,this.location.y,this.diameter);
@@ -61,6 +61,7 @@ class Creature {
 
 let creatures = [];
 let food = [];
+let bb;
 
 
 let slider;
@@ -84,7 +85,8 @@ function setup() {
 function draw() {
   background(200);
   textSize(20);
-text('Affect how much does the creatures get bigger after eating food ', 15, 390);
+  text('Affect how much does the creatures get bigger after eating food ', 15, 390);
+  text('It has already added by the diameter of food', 15, 420);
   // loop through all the creatrure and animate them each frame by accessing their update function
   for (let c of creatures) {
     c.update();
@@ -107,16 +109,22 @@ text('Affect how much does the creatures get bigger after eating food ', 15, 390
 }
 
 function updateFood(){
+
+
+
   for(let i = food.length-1; i >= 0 ; i--){
     fill(100);
     circle(food[i].x,food[i].y,food[i].d);//读取food的值
     food[i].y += 1;
     food[i].x += random(1);
+
     if(food[i].y > height){
       food.splice(i,1);//remove one from array at index i
     }
   }
+
 }
+
 
 function addGUI()
 {
@@ -134,10 +142,16 @@ function handleButtonPress(){
       food.push({
           x:random(width),
           y:random(height/2),
-          d:random(5,10)
-        });
+          d:random(5,100)
+        })
+    function go(x){    
+      return food[x].d;
+        }
+      bb=go(0);
+      
+
     }
-    
+  
     if(food.length > 0){
       button.html("FEEDING");
       button.addClass("inactive");
@@ -177,3 +191,7 @@ function windowResized() {
     // if(this.full > 0){
     //   this.full--;
     // }
+
+
+
+    
